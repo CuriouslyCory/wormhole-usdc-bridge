@@ -9,6 +9,7 @@ import { ChainSelector } from "../chain-selector/ChainSelector";
 import { FeeBreakdown } from "./FeeBreakdown";
 import { BridgeService } from "~/lib/wormhole/bridge-service";
 import { TransferMethod } from "./TransferMethod";
+import { useWalletConnection } from "~/hooks/useWalletConnection";
 
 // Input validation schema
 const formSchema = z.object({
@@ -25,6 +26,9 @@ export function TransferForm() {
   
   // Bridge service for fee estimation and transfer method detection
   const [bridgeService] = useState(() => new BridgeService());
+  
+  // Use our custom wallet connection hook
+  const { address, isConnected, isPending: isConnecting, connectWallet, formatAddress } = useWalletConnection();
   
   // Transfer method detection
   const transferMethod = sourceChain && destinationChain 
@@ -116,6 +120,15 @@ export function TransferForm() {
     }
   };
   
+  // Connect wallet handler
+  const handleConnectWallet = async () => {
+    try {
+      await connectWallet();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to connect wallet");
+    }
+  };
+  
   // Initialize transfer
   const handleTransfer = async () => {
     setError(null);
@@ -137,15 +150,17 @@ export function TransferForm() {
         throw new Error("Source and destination chains must be different");
       }
       
-      // In a real app, you'd connect to the user's wallet here
-      const walletAddress = "0x123..."; // Placeholder
+      // Ensure wallet is connected
+      if (!isConnected || !address) {
+        throw new Error("Wallet is not connected");
+      }
       
-      // Initiate transfer
+      // Initiate transfer using the connected wallet address
       const transfer = await bridgeService.initiateTransfer(
         sourceChain as ChainId,
         destinationChain as ChainId,
         amount,
-        walletAddress,
+        address,
       );
       
       // In a real app, you'd redirect to a status page or show a success message
@@ -157,6 +172,7 @@ export function TransferForm() {
       setDestinationChain("");
       setFeeEstimation(null);
     } catch (err) {
+      console.error("Transfer error:", err);
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setIsTransferring(false);
@@ -207,6 +223,16 @@ export function TransferForm() {
           </div>
         </div>
         
+        {/* Wallet Connection Status */}
+        {feeEstimation && (
+          <div className="flex items-center justify-between rounded-md bg-secondary/20 px-3 py-2 text-sm">
+            <span>Wallet Status:</span>
+            <span className={`font-medium ${isConnected ? "text-green-600" : "text-amber-600"}`}>
+              {isConnected && address ? formatAddress(address) : "Not Connected"}
+            </span>
+          </div>
+        )}
+        
         {/* Transfer Method */}
         {sourceChain && destinationChain && transferMethod && (
           <TransferMethod method={transferMethod} />
@@ -242,7 +268,17 @@ export function TransferForm() {
             </Button>
           )}
           
-          {feeEstimation && (
+          {feeEstimation && !isConnected && (
+            <Button
+              onClick={handleConnectWallet}
+              disabled={isConnecting}
+              className="w-full"
+            >
+              {isConnecting ? "Connecting..." : "Connect Wallet"}
+            </Button>
+          )}
+          
+          {feeEstimation && isConnected && (
             <Button
               onClick={handleTransfer}
               disabled={isTransferring}

@@ -7,10 +7,11 @@ alwaysApply: false
 - Nextjs v15
 - React v19
 - tailwindcss v4
+- Tanstack query (react-query)
+- wagmi + viem (web3 wallet connector)
 - shadcn/ui (components)
-- TRPC v11
+- TRPC v11 (serverless functions/backend)
 - drizzle orm (sqlite)
-- next-auth
 - postgres
 
 ## Folder Structure Meta

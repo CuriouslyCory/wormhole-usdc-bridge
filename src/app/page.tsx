@@ -1,3 +1,4 @@
+import { WalletProvider } from "~/components/wallet-provider";
 import { TransferForm } from "~/components/wormhole/transfer/TransferForm";
 import { HydrateClient } from "~/trpc/server";
 
@@ -20,7 +21,9 @@ export default async function Home() {
           </div>
           
           <div className="w-full max-w-lg">
-            <TransferForm />
+            <WalletProvider>
+              <TransferForm />
+            </WalletProvider>
           </div>
           
           <div className="mt-8 flex max-w-3xl flex-col items-center justify-center gap-4 text-center text-sm text-gray-300">
