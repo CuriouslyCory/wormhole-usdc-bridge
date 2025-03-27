@@ -1,0 +1,53 @@
+---
+description: Project Specification
+globs: 
+alwaysApply: false
+---
+# Wormhole Token (USDC) Transfer Tool
+
+- Uses the wormhole sdk (https://wormhole-foundation.github.io/wormhole-sdk-ts/#md:wormhole-ts-sdk) to bridge USDC between supported networks.
+🧠 Core Features Possible with Wormhole SDK
+
+1. 🔁 Cross-Chain USDC Bridging
+	•	Support for bridging native USDC via CCTP (on supported chains) using Wormhole’s CCTP integration.
+	•	Support for wrapped USDC bridging via Wormhole Token Bridge on chains without CCTP.
+	•	Auto-detection of whether to use CCTP vs Token Bridge depending on source/destination.
+
+Available via:
+	•	@wormhole-foundation/cctp-sdk
+	•	@wormhole-foundation/token-bridge-sdk
+
+2. 🔍 Route Selection & Cost Estimation (Simplified Smart Routing)
+	•	Show which bridge mechanism will be used (CCTP vs Wormhole Token Bridge).
+	•	Display gas estimates for both chains.
+	•	Show estimated final amount after fees.
+
+Available via:
+	•	Manual integration using getSignedVAA + fetchTransferFees + local gas estimation tools.
+
+3. ⚡ Fast UX with Status Tracking
+	•	Real-time transfer status tracking:
+	•	Step 1: Initiate transfer
+	•	Step 2: Attest/confirm VAAs
+	•	Step 3: Complete redemption
+	•	Display transfer progress with friendly UI steps.
+
+Available via:
+	•	getSignedVAAWithRetry()
+	•	parseSequenceFromLogEth, etc.
+
+4. 🔐 Secure Redemption & Replay Protection
+	•	Ensure VAAs are not reused, verify authenticity.
+	•	Retry redemption in case of RPC issues or dropped txs.
+
+Available via:
+	•	redeemAndUnwrapOnEth
+	•	getIsTransferCompletedEth
+
+5. 🧱 Developer-Ready SDK & Modular UX
+	•	Let developers and DAOs integrate the app via SDK or REST API.
+	•	Build a modular UI where bridging logic is abstracted but flexible.
+
+Available via:
+	•	Wormhole SDK exports all the primitives.
+	•	Can package custom wrapper functions around CCTP/Wormhole flows.

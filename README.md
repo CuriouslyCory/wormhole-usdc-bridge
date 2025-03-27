@@ -1,29 +1,116 @@
-# Create T3 App
+# Wormhole USDC Transfer Tool
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+A modern, secure application for transferring USDC between different blockchains using Wormhole's cross-chain bridging technology.
 
-## What's next? How do I make an app with this?
+![Wormhole USDC Bridge](https://user-images.githubusercontent.com/some_user/some_repo/wormhole-usdc-bridge-preview.png)
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## Features
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+- **Intelligent Routing**: Automatically chooses between CCTP (for native USDC) or Wormhole Token Bridge (for wrapped USDC) depending on chain support
+- **Real-time Status Tracking**: Monitor your transfer progress with a step-by-step interface
+- **Fee Estimation**: Get accurate cost breakdowns before initiating transfers
+- **Secure by Design**: Implements VAA verification and replay protection
+- **Developer-Ready**: Modular architecture that can be extended or integrated
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+## Tech Stack
 
-## Learn More
+- Next.js 15 & React 19
+- Tailwind CSS 4 & shadcn/ui
+- tRPC 11
+- Wormhole SDK 1.14.0
+- Drizzle ORM
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+## Getting Started
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+### Prerequisites
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+- Node.js 20.x or higher
+- pnpm 9.x or higher
 
-## How do I deploy this?
+### Installation
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+1. Clone the repository
+```bash
+git clone https://github.com/yourusername/wormhole-usdc-bridge.git
+cd wormhole-usdc-bridge
+```
+
+2. Install dependencies
+```bash
+pnpm install
+```
+
+3. Copy the example environment file and configure it
+```bash
+cp .env.example .env
+```
+
+4. Run the development server
+```bash
+pnpm dev
+```
+
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+## Architecture
+
+This application is structured around the following components:
+
+- **Bridge Service**: Core class that interfaces with the Wormhole SDK
+- **Transfer Form**: UI component for initiating transfers
+- **Status Tracking**: Components for monitoring cross-chain transfers
+- **Chain Selector**: UI for selecting source and destination chains
+
+## Security
+
+This implementation includes:
+
+- VAA (Verifiable Action Approval) verification
+- Replay protection to prevent double-spending
+- Automatic retry mechanisms for network issues
+
+## Supported Chains
+
+The current implementation supports:
+
+- Ethereum (Mainnet)
+- Polygon
+- Avalanche
+- Arbitrum
+- Optimism
+- Base
+- Solana
+- BNB Chain
+
+## Development
+
+### Running Tests
+
+```bash
+pnpm test
+```
+
+### Linting
+
+```bash
+pnpm lint
+```
+
+### Building for Production
+
+```bash
+pnpm build
+```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- [Wormhole](https://wormhole.com/) for their cross-chain bridging technology
+- [T3 Stack](https://create.t3.gg/) for the project template
